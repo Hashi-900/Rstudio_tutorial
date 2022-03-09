@@ -351,3 +351,615 @@ my_list[[2]]
 
 my_list[[3]][2]
 
+
+### Intermediate courese for R programming language
+# Comparison of logicals
+TRUE == FALSE
+
+# Comparison of numerics
+-6 * 14 != 17 - 101
+
+# Comparison of character strings
+"useR" == "user"
+
+# Compare a logical with a numeric
+TRUE == 1
+
+# Comparison of numerics
+-6*5+2 >= -10+1
+
+# Comparison of character strings
+"raining" <= "raining dogs"
+
+# Comparison of logicals
+TRUE > FALSE
+linkedin <- c(16, 9, 13, 5, 2, 17, 14)
+facebook <- c(17, 7, 5, 16, 8, 13, 14)
+
+# Popular days
+linkedin > 15
+
+# Quiet days
+linkedin <= 5
+
+# LinkedIn more popular than Facebook
+linkedin > facebook
+
+views <- matrix(c(linkedin, facebook), nrow = 2, byrow = TRUE)
+
+# When does views equal 13?
+views == 13
+
+# When is views less than or equal to 14?
+views <= 14
+
+# How often does facebook equal or exceed linkedin times two?
+sum(facebook >= linkedin * 2)
+
+linkedin <- c(16, 9, 13, 5, 2, 17, 14)
+last <- tail(linkedin, 1)
+
+# Is last under 5 or above 10?
+last<5 | last>10
+
+# Is last between 15 (exclusive) and 20 (inclusive)?
+last>15 & last<=20
+
+# Is last between 0 and 5 or between 10 and 15?
+(last > 0 & last < 5) | (last > 10 & last < 15)
+
+linkedin>10 & facebook<10
+
+# When were one or both visited at least 12 times?
+linkedin>=12 | facebook>=12
+
+# When is views between 11 (exclusive) and 14 (inclusive)?
+views>11 & views<=14
+
+###Reverse The Result: !
+x <- 5
+y <- 7
+!(!(x < 4) & !!!(y > 12))
+
+# Select the second column, named day2, from li_df: second
+mpg <- mtcars$mpg
+
+# Build a logical vector, TRUE if value in second is extreme: extremes
+extremes <- mpg > 25 | mpg < 5
+
+# Count the number of TRUEs in extremes
+sum(extremes)
+
+# Solve it with a one-liner
+sum(mtcars$qsec > 25 | mtcars$qsec < 5)
+
+
+## Control structure of R programming language
+# Variables related to your last day of recordings
+medium <- "LinkedIn"
+num_views <- 14
+
+# Examine the if statement for medium
+if (medium == "LinkedIn") {
+  print("Showing LinkedIn information")
+}
+
+# Write the if statement for num_views
+if(num_views > 15){
+  print('You are popular!')
+}
+
+# Control structure for medium
+if (medium == "LinkedIn") {
+  print("Showing LinkedIn information")
+} else {
+  print("Unknown medium")
+}
+
+# Control structure for num_views
+if (num_views > 15) {
+  print("You're popular!")
+} else {
+  print("Try to be more visible!")
+}
+
+# Control structure for medium
+if (medium == "LinkedIn") {
+  print("Showing LinkedIn information")
+} else if (medium == "Facebook") {
+  # Add code to print correct string when condition is TRUE
+  print('Showing Facebook information')
+} else {
+  print("Unknown medium")
+}
+
+# Control structure for num_views
+if (num_views > 15) {
+  print("You're popular!")
+} else if (num_views <= 15 & num_views > 10) {
+  # Add code to print correct string when condition is TRUE
+  print('Your number of views is average')
+} else {
+  print("Try to be more visible!")
+}
+
+li <- 15
+fb <- 9
+
+# Code the control-flow construct
+if (li >= 15 & fb >= 15) {
+  sms <- 2 * (li + fb)
+} else if (li < 10 & fb < 10) {
+  sms <- 0.5 * (li + fb)
+} else {
+  sms <- li + fb
+}
+
+# Print the resulting sms to the console
+print(sms)
+
+# While loop
+
+ctr <- 1
+
+while(ctr <= 8){
+  print(paste('ctr is equal to', ctr))
+  ctr <- ctr + 1
+}
+
+while(ctr <= 8){
+  if(ctr %% 7 ==0) {
+    break
+  }
+  print(paste('ctr is equal to', ctr))
+  ctr <- ctr + 1
+}
+
+# Initialize the speed variable
+speed <- 64
+# Code the while loop
+while (speed > 30) {
+  print("Slow down!")
+  speed = speed - 7
+}
+# Print out the speed variable
+speed
+
+# Extend/adapt the while loop
+speed <- 68
+while (speed > 30) {
+  print(paste("Your speed is", speed))
+  if (speed > 48) {
+    print("Slow down big time!")
+    speed <- speed - 11
+  } else {
+    print("Slow down!")
+    speed <- speed - 6
+  }
+}
+
+speed <- 88
+while (speed > 30) {
+  print(paste("Your speed is", speed))
+  # Break the while loop when speed exceeds 80
+  if (speed > 80) {
+    break
+  }
+  if (speed > 48) {
+    print("Slow down big time!")
+    speed <- speed - 11
+  } else {
+    print("Slow down!")
+    speed <- speed - 6
+  }
+}
+
+i <- 1
+# Code the while loop
+while (i <= 10) {
+  print(i * 3)
+  if (i * 3 %% 8 == 0) {
+    break
+  }
+  i <- i + 1
+}
+
+cities <- c('Mogadishu', 'Kismayo', 'Mekka', 'Antalya', 'Istanbul','Toronto', 'Seoul')
+
+
+for(city in cities){
+  print(city)
+}
+
+for(city in cities){
+  if(nchar(city) == 8){
+    break
+  }
+  print(city)
+}
+
+for(city in cities){
+  if(nchar(city) == 8){
+    next
+  }
+  print(city)
+}
+
+for(i in 1:length(cities)){
+  print(paste(cities[i], 'is on position', i, 'in the cities vector'))
+}
+
+linkedin <- c(16, 9, 13, 5, 2, 17, 14)
+# Loop version 1
+for (view in linkedin) {
+  print(view)
+}
+# Loop version 2
+for (i in 1:length(linkedin)) {
+  print(linkedin[i])
+}
+
+# The nyc list is already specified
+nyc <- list(pop = 8405837, 
+            boroughs = c("Manhattan", "Bronx", "Brooklyn", "Queens", "Staten Island"), 
+            capital = FALSE)
+
+# Loop version 1
+
+for(i in nyc){
+  print(i)
+}
+
+
+# Loop version 2
+for(j in 1:length(nyc)){
+  print(nyc[[j]])
+}
+
+# The tic-tac-toe matrix ttt has already been defined for you
+ttt <- matrix(c("O", "NA", "X", "NA", "O", "O", "X", "NA", "X"), 
+              nrow = 3, 
+              byrow = TRUE)
+# Define the double for loop
+for (i in 1:nrow(ttt)) {
+  for (j in 1:ncol(ttt)) {
+    print(paste("On row", i, "and column", j, "the board contains", ttt[i,j]))
+  }
+}
+
+linkedin <- c(16, 9, 13, 5, 2, 17, 14)
+# Code the for loop with conditionals
+for (li in linkedin) {
+  if (li > 10) {
+    print("You're popular!")
+  } else {
+    print("Be more visible!")
+  }
+  print(li)
+}
+
+linkedin <- c(16, 9, 13, 5, 2, 17, 14)
+# Extend the for loop
+for (li in linkedin) {
+  if (li > 10) {
+    print("You're popular!")
+  } else {
+    print("Be more visible!")
+  }
+  # Add if statement with break
+  if(li > 16){
+    print("This is ridiculous, I'm outta here!")
+    break
+  }
+  # Add if statement with next
+  if(li < 5){
+    print("This is too embarrassing!")
+    next
+  }
+  print(li)
+}
+
+# Pre-defined variables
+rquote <- "r's internals are irrefutably intriguing"
+chars <- strsplit(rquote, split = "")[[1]]
+# Initialize rcount
+rcount <- 0
+# Finish the for loop
+for (char in chars) {
+  if(char == "r") {
+    rcount = rcount + 1
+  }
+  if(char == "u") {
+    break
+  }
+}
+# Print out rcount
+rcount
+
+# Introduction to functions in R
+
+args(var)
+?var
+# Consult the documentation on the mean() function
+?mean
+help(mean)
+
+# Inspect the arguments of the mean() function
+args(mean)
+
+linkedin <- c(16, 9, 13, 5, 2, 17, 14)
+facebook <- c(17, 7, 5, 16, 8, 13, 14)
+
+### Use a function ###
+# Calculate average number of views
+avg_li <- mean(linkedin)
+avg_fb <- mean(facebook)
+# Inspect avg_li and avg_fb
+avg_li
+avg_fb
+
+# Calculate the mean of the sum
+avg_sum <- mean(linkedin + facebook)
+
+# Calculate the trimmed mean of the sum
+avg_sum_trimmed <- mean(linkedin + facebook, trim = 0.2)
+
+# Inspect both new variables
+avg_sum
+avg_sum_trimmed
+
+# The linkedin and facebook vectors have already been created for you
+linkedin <- c(16, 9, 13, 5, NA, 17, 14)
+facebook <- c(17, NA, 5, 16, 8, 13, 14)
+
+# Basic average of linkedin
+mean(linkedin)
+## [1] NA
+# Advanced average of linkedin
+mean(linkedin, na.rm = TRUE)
+
+# The linkedin and facebook vectors have already been created for you
+linkedin <- c(16, 9, 13, 5, NA, 17, 14)
+facebook <- c(17, NA, 5, 16, 8, 13, 14)
+
+# Calculate the mean absolute deviation
+mean(abs(linkedin - facebook), na.rm = TRUE)
+
+# Create a function pow_two()
+pow_two <- function(x) {
+  x ** 2
+}
+
+# Use the function
+pow_two(12)
+## [1] 144
+# Create a function sum_abs()
+sum_abs <- function(a, b) {
+  abs(a) + abs(b)  
+}
+
+# Use the function
+sum_abs(-2, 3)
+# Define the function hello()
+hello <- function() {
+  print("Hi there!")
+  return(TRUE)
+}
+
+# Call the function hello()
+hello()# Define the function hello()
+
+# Finish the pow_two() function
+pow_two <- function(x, print_info = TRUE) {
+  y <- x ** 2
+  if (print_info == TRUE){
+    print(paste(x, "to the power two equals", y))
+  }
+  return(y)
+}
+
+# Define the interpret function
+interpret <- function(num_views) {
+  if (num_views > 15) {
+    print("You're popular!")
+    return(num_views)
+    
+  } else {
+    print("Try to be more visible!")
+    return(0)
+    
+  }
+}
+
+# Call the interpret function twice
+interpret(linkedin)
+interpret(facebook[2])
+
+# Define the interpret_all() function
+# views: vector with data to interpret
+# return_sum: return total number of views on popular days?
+interpret_all <- function(views, return_sum = TRUE) {
+  count <- 0
+  
+  for (v in views) {
+    count <- count + interpret(v)
+  }
+  
+  if (return_sum) {
+    return(count)
+  } else {
+    return(NULL)
+  }
+}
+
+# Call the interpret_all() function on both linkedin and facebook
+interpret_all(linkedin)
+interpret_all(facebook)
+
+#apply functions
+
+nyc <- list(pop=12546546,
+            broughts =c('Manhattan', 'Bronx', 'Brooklyn', 'Queens', 'Staten island'),
+            capital=FALSE)
+
+for(info in nyc){
+  print(class(info))
+}
+lapply(nyc, class)
+
+num_char <- c()
+
+for(i in 1:length(cities)){
+  num_char[i] <- nchar(cities[i])
+}
+
+lapply(cities, nchar)
+
+unlist(lapply(cities, nchar))
+
+# The vector pioneers has already been created for you
+pioneers <- c("GAUSS:1777", "BAYES:1702", "PASCAL:1623", "PEARSON:1857")
+
+# Split names from birth year
+split_math <- strsplit(pioneers, split = ":")
+
+# Convert to lowercase strings: split_low
+split_low <- lapply(split_math, tolower)
+
+# Take a look at the structure of split_low
+str(split_low)
+
+# Write function select_first()
+select_first <- function(x) {
+  x[1]
+}
+
+# Apply select_first() over split_low: names
+names <-lapply(split_low, select_first)
+
+names
+# Write function select_second()
+select_second <- function(x){
+  x[2]
+}
+
+
+
+# Apply select_second() over split_low: years
+years <-lapply(split_low, select_second)
+years
+
+
+data_df <- tibble(names =c('hashi', 'ahmed', 'hafsa', 'zahra', 'aishe'),
+                  years= c(1988, 1999, 2001, 2004, 2005))
+
+lapply(names(data_df), nchar)
+
+sapply(cities, nchar)
+
+first_last <- function(name){
+  name =gsub(" ", "", name)
+  letters <- strsplit(name, split="")[[1]]
+  c(first=min(letters), last=max(letters))
+}
+
+sapply(cities, first_last)
+
+# Create a function that returns min and max of a vector: extremes
+extremes <- function(x) {
+  c(min = min(x), max = max(x))
+}
+
+lapply(linkedin, extremes)
+sapply(linkedin, extremes)
+
+temp <- list(c(2, 3, 5),c(4,6,7,8), c(-1, 0, -3, -5), c(2,5))
+
+# Definition of basics()
+basics <- function(x) {
+  c(min = min(x), mean = mean(x), max = max(x))
+}
+
+# Apply basics() over temp using vapply()
+vapply(temp, basics, numeric(3))
+
+
+# Definition of the basics() function
+basics <- function(x) {
+  c(min = min(x), mean = mean(x), median = median(x), max = max(x))
+}
+
+# Fix the error:
+vapply(temp, basics, numeric(4))
+
+li_list <- list(
+  log=TRUE,
+  ch = "Hello",
+  int_vec = sort(rep(seq(1, 12, by=0.98), times=2))
+)
+
+str(li_list)
+
+is.list(li_list)
+
+str(append(li_list, rev(li_list)))
+
+# The errors vector has already been defined for you
+errors <- c(1.9, -2.6, 4.0, -9.5, -3.4, 7.3)
+
+# Sum of absolute rounded values of errors
+sum(abs(round(errors)))
+
+# The linkedin and facebook lists have already been created for you
+linkedin <- list(16, 9, 13, 5, 2, 17, 14)
+facebook <- list(17, 7, 5, 16, 8, 13, 14)
+
+# Convert linkedin and facebook to a vector: li_vec and fb_vec
+li_vec <- unlist(linkedin)
+fb_vec <- unlist(facebook)
+
+# Append fb_vec to li_vec: social_vec
+social_vec <- append(li_vec, fb_vec)
+
+# Sort social_vec
+sort(social_vec, decreasing = TRUE)
+
+rep(seq(1, 7, by = 2), times = 7)
+
+# Create first sequence: seq1
+seq1 <- seq(1, 500, by=3)
+
+# Create second sequence: seq2
+seq2 <- seq(1200, 900, by=-7)
+
+# Calculate total sum of the sequences
+sum(seq1)+ sum(seq2)
+
+## reg functions
+
+animal <- c('cat', 'graffe', 'elephant', 'camel', 'cow', 'goat', 'empala', 'ante')
+
+grepl(pattern = 'a', x=animal)
+
+# if we want strings that start with a then we can cater metacarate here.
+grepl(pattern = '^a', x=animal)
+
+# if we waant the end of the word
+grepl(pattern = 'a$', x=animal)
+
+# grap function  returns the indeces of the elements of x that yeild a match.
+grep(pattern = 'a', x=animal)
+
+
+sub(pattern = 'w', replacement = 'ee', x=animal)
+
+data_df <-gsub(pattern = "\\[.*?\\]", replacement = "", x=names(data_df))
+
+gsub(pattern = 'a', replacement = 'o', x=animal)
+
+data_df <- tibble(name = c('shi', 'ali', 'fidi', 'kie'), `2000[2000]`=c(5,6,7,7),
+                                 `2001[2002]` = c(5,6,7,8))
+
+p <-sub("\\[.*", "", names(data_df))
+
+names(data_df) <- paste0('v', 1:ncol(data_df))
