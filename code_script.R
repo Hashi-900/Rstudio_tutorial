@@ -963,3 +963,71 @@ data_df <- tibble(name = c('shi', 'ali', 'fidi', 'kie'), `2000[2000]`=c(5,6,7,7)
 p <-sub("\\[.*", "", names(data_df))
 
 names(data_df) <- paste0('v', 1:ncol(data_df))
+
+# The emails vector has already been defined for you
+emails <- c("john.doe@ivyleague.edu", "education@world.gov", "dalai.lama@peace.org",
+            "invalid.edu", "quant@bigdatacollege.edu", "cookie.monster@sesame.tv")
+
+# Use grepl() to match for "edu"
+grepl(pattern='edu', x=emails)
+
+# Use grep() to match for "edu", save result to hits
+hits <- grep(pattern = 'edu', x=emails)
+
+# Subset emails using hits
+emails[hits]
+
+# Use grepl() to match for .edu addresses more robustly
+grepl(pattern = '@.*\\.edu$', x=emails)
+
+# Use grep() to match for .edu addresses more robustly, save result to hits
+hits <- grep(pattern='@.*\\.edu$', x=emails)
+
+# Subset emails using hits
+emails[hits]
+
+
+# Use sub() to convert the email domains to datacamp.edu
+sub(pattern='@.*\\.edu$', replacement='@datacamp.edu', x=emails)
+
+
+#Date and Times in R programming
+
+today <- Sys.Date()
+today
+
+class(today)
+
+now <- Sys.time()
+now
+class(now)
+
+#creating data object
+
+my_data <- as.Date("2006-05-23")
+
+my_data
+class(my_data)
+
+my_data_two <- as.Date("2018-26-07", format="%Y-%d-%m")
+
+my_data_two
+
+my_data + 2
+
+my_data_two - my_data
+
+# Definition of character strings representing dates
+str1 <- "May 23, '96"
+str2 <- "2012-03-15"
+str3 <- "30/January/2006"
+
+# Convert the strings to dates: date1, date2, date3
+date1 <- as.Date(str1, format = "%b %d, '%y")
+date2 <- as.Date(str2)
+date3 <- as.Date(str3, format = "%d/%B/%Y")
+
+# Convert dates to formatted strings
+format(date1, "%A")
+format(date2, "%d")
+format(date3, "%b %Y")
