@@ -1122,3 +1122,208 @@ gap_2002 %>%
 
 gap_2002 %>% 
   ggplot(aes(continent, lifeExp)) + geom_boxplot()
+
+## dplyr course for data manipulation
+
+counties <-read_csv('counties_dataset.csv') %>% 
+  select(STATE, COUNTY, STNAME, CTYNAME, CENSUS2010POP, BIRTHS2013, POPESTIMATE2012)
+
+counties <- counties %>% 
+  rename(state=STATE, county=COUNTY, state_name=STNAME, County_name=CTYNAME,
+         pop=CENSUS2010POP)
+
+counties %>% 
+  arrange(desc(pop))
+
+
+counties %>% 
+  filter(state_name=='California') %>% 
+  arrange(desc(pop))
+
+
+counties %>% 
+  filter(state_name=='Texas' | state_name=='California', pop > 2000000) %>% 
+  arrange(desc(pop))
+
+
+counties %>% 
+  count()
+
+counties %>% 
+  count(state_name, sort = TRUE)
+
+counties %>% 
+  count(state_name, wt=pop, sort = TRUE)
+
+counties %>% 
+  group_by(state_name) %>% 
+  top_n(3, pop)
+
+
+counties %>% 
+  select(-c('state', 'county'))
+
+
+babynames
+
+babynames %>% 
+  filter(name %in% c('Muhammed', 'Ahmed', 'George')) %>% 
+ggplot(aes(year, n, color=name)) + geom_line() + geom_point()
+
+
+babynames %>% 
+  filter(name %in% c('George', 'David')) %>% 
+  ggplot(aes(year, n, color=name)) + geom_line() #+ geom_point()
+
+
+babynames_grouped <- babynames %>% 
+  group_by(year) %>% 
+  mutate(year_total= sum(n)) %>% 
+  ungroup() %>% 
+  mutate(year_frac = n/year_total)
+
+babynames_grouped
+
+babynames_grouped %>% 
+  filter(name %in% c('George', 'David')) %>% 
+  ggplot(aes(year, year_frac, color=name)) + geom_line()
+
+
+x <- c(3, 5, 6, 9, 0, 10, 1, 3, 7, 4, 8)
+
+averg_x <- mean(x)
+var_x <- var(x)
+ 
+x_cubed <-sum((x-averg_x)^3)
+
+var_two_third <- var_x^(3/2)
+
+(x_cubed*sqrt(11))/var_two_third
+
+## Manipulating data with dplyr 
+
+setwd('C:/Users/mrage/Desktop/r_course drafts/R_course/R_course/Lego dataset')
+
+dir()
+
+colors <- read_csv('colors.csv')
+
+inventories <- read_csv('inventories.csv')
+
+inventories_parts <- read_csv("inventory_parts.csv")
+
+sets <- read_csv('sets.csv')
+
+themes <- read_csv('themes.csv')
+
+parts <- read_csv('parts.csv')
+part_categories <- read_csv('part_categories.csv')
+
+sets
+
+themes
+
+sets %>% 
+  inner_join(themes, by=c('theme_id'='id'), suffix=c('_sets', '_theme')) %>% 
+  count(name_theme, sort = TRUE)
+
+part_categories %>% 
+  glimpse()
+
+parts %>% 
+  glimpse()
+
+parts %>% 
+  inner_join(part_categories, by = c("part_cat_id" = "id"), 
+             suffix=c('_part', '_category'))
+
+
+sets %>% 
+  inner_join(inventories, by='set_num') %>% 
+  filter(version==1)
+
+
+parts %>%
+  inner_join(inventories_parts, by='part_num')
+
+# Combine the parts and inventory_parts tables
+inventories_parts %>%
+  inner_join(parts, by='part_num')
+
+
+sets %>% 
+  inner_join(inventories, by='set_num') %>% 
+  inner_join(themes, by=c('theme_id'='id'), suffix=c('_set', '_theme'))
+
+
+sets %>%
+  # Add inventories using an inner join 
+  inner_join(inventories, by='set_num') %>%
+  # Add inventory_parts using an inner join 
+  inner_join(inventories_parts, by=c('id'='inventory_id'))
+
+# Count the number of colors and sort
+sets %>%
+  inner_join(inventories, by = "set_num") %>%
+  inner_join(inventories_parts, by = c("id" = "inventory_id")) %>%
+  inner_join(colors, by = c("color_id" = "id"), suffix = c("_set", "_color")) %>%
+  count(name_color, sort=TRUE)
+
+inventory_parts_joined <- inventories %>% 
+  inner_join(inventories_parts, by=c('id'='inventory_id')) %>% 
+  select(-id, -version) %>% 
+  arrange(desc(quantity))
+
+batmobile <- inventory_parts_joined %>% 
+  filter(set_num=='7784-1') %>% 
+  select(-set_num)
+
+batwing <- inventory_parts_joined %>% 
+  filter(set_num=='70916-1') %>% 
+  select(-set_num)
+
+
+batmobile %>% 
+  inner_join(batwing, by=c('part_num', 'color_id'), suffix=c('_batmobile', '_batwing'))
+
+
+
+
+batmobile %>% 
+  left_join(batwing, by=c('part_num', 'color_id'), suffix=c('_batmobile', '_batwing'))
+
+
+millennium_falcon <- inventory_parts_joined %>%
+  filter(set_num == "7965-1")
+
+star_destroyer <- inventory_parts_joined %>%
+  filter(set_num == "75190-1")
+
+# Combine the star_destroyer and millennium_falcon tables
+millennium_falcon %>%
+  left_join(star_destroyer, by=c('color_id', 'part_num'),
+            suffix=c('_falcon', '_star_destroyer'))
+
+# Aggregate Millennium Falcon for the total quantity in each part
+millennium_falcon_colors <- millennium_falcon %>%
+  group_by(color_id) %>%
+  summarize(total_quantity = sum(quantity))
+
+# Aggregate Star Destroyer for the total quantity in each part
+star_destroyer_colors <- star_destroyer %>%
+  group_by(color_id) %>%
+  summarize(total_quantity = sum(quantity))
+
+# Left join the Millennium Falcon colors to the Star Destroyer colors
+millennium_falcon_colors %>%
+  left_join(star_destroyer_colors, by='color_id',
+            suffix=c('_falcon', '_star_destroyer'))
+
+inventory_version_1 <- inventories %>%
+  filter(version == 1)
+
+# Join versions to sets
+sets %>%
+  left_join(inventory_version_1, by='set_num') %>%
+  # Filter for where version is na
+  filter(is.na(version))
