@@ -1031,3 +1031,94 @@ date3 <- as.Date(str3, format = "%d/%B/%Y")
 format(date1, "%A")
 format(date2, "%d")
 format(date3, "%b %Y")
+
+## TidyVerse Course
+library(gapminder)
+
+gapminder
+
+gapminder %>% 
+  filter(year==2002)
+
+gapminder %>% 
+  filter(country== 'Somalia')
+
+gapminder %>% 
+  filter(year == 2002, country=='Somalia')
+
+gapminder %>% 
+  arrange(gdpPercap)
+
+gapminder %>% 
+  arrange(desc(gdpPercap))
+
+gapminder %>% 
+  filter(year == 2002) %>% 
+  arrange(desc(gdpPercap))
+
+gapminder %>% 
+  mutate(pop = pop/1000000)
+
+gapminder %>% 
+  mutate(gdp= gdpPercap * pop) %>% 
+  filter(year ==2002) %>% 
+  arrange(desc(gdp))
+
+gap_2002 <- gapminder %>% 
+  filter(year == 2002)
+
+gap_2002
+
+gap_2002 %>% 
+  ggplot(aes(gdpPercap, lifeExp)) + geom_point() +
+  scale_x_log10()
+
+gap_2002 %>% 
+  ggplot(aes(gdpPercap, lifeExp, color=continent, size=pop)) + geom_point() +
+  scale_x_log10() + theme_minimal()
+
+gap_2002 %>% 
+  ggplot(aes(gdpPercap, lifeExp, size=pop)) + geom_point() +
+  scale_x_log10() + facet_wrap(~continent) +
+  theme_minimal() 
+
+gapminder %>% 
+ggplot(aes(gdpPercap, lifeExp, color=continent,size=pop)) + geom_point() +
+  scale_x_log10() + facet_wrap(~year) +
+  theme_minimal() 
+
+gapminder %>% 
+  filter(year == 2002) %>%
+  group_by(continent) %>% 
+  summarise(mean_lifeex=mean(lifeExp),
+            total_pop=sum(pop))
+
+
+by_year_continent <- gapminder %>% 
+  group_by(year, continent) %>% 
+  summarise(mean_lifeex=mean(lifeExp),
+            total_pop=sum(pop))
+
+ggplot(by_year_continent, aes(year, mean_lifeex, color=continent)) + 
+  geom_line()
+
+
+gapminder %>% 
+  group_by(year) %>% 
+  summarise(meanGdpPercap = median(lifeExp)) %>% 
+  ggplot(aes(year, meanGdpPercap)) + geom_line() +
+  expand_limits(y=0)
+
+gapminder %>% 
+  filter(year == 2002) %>% 
+  group_by(continent) %>% 
+  summarise(meanLifeExp = mean(lifeExp)) %>% 
+  ggplot(aes(continent, meanLifeExp)) + geom_col()
+
+
+gap_2002 %>% 
+  ggplot(aes(lifeExp)) + geom_histogram() + scale_x_log10()
+
+
+gap_2002 %>% 
+  ggplot(aes(continent, lifeExp)) + geom_boxplot()
