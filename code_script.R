@@ -1489,8 +1489,28 @@ separate(tags, into = c('tag_parent', 'tag_child'), sep=',') %>%
   
   
 
-stack_tidy %>% 
-filter(tag_parent=='r') %>% 
+stack_tidy %>%
+  mutate(year = day(date)) %>%
+  distinct(year)
+filter(tag_parent=='r', date==2021) %>% 
   group_by(tag_child) %>% 
   count(tag_child, sort = TRUE)
+  
+
+## DATA visualization using ggplot2
+my_blue <- "#4ABEFF"
+
+ggplot(mtcars, aes(mpg, wt, fill=cyl)) +
+  geom_text(color=my_blue, shape=1, size=10)
+
+
+iris_summary <-iris %>% 
+  group_by(Species) %>% 
+  summarise_all(mean)
+
+iris %>% 
+  ggplot(aes(Petal.Length, Sepal.Width, color=Species)) +
+  geom_point(alpha = 0.5, position = position_jitter(width = 0.1)) +
+  geom_point(data = iris_summary, shape=15, size=5)
+
   
