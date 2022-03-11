@@ -1327,3 +1327,170 @@ sets %>%
   left_join(inventory_version_1, by='set_num') %>%
   # Filter for where version is na
   filter(is.na(version))
+
+batmobile <- batmobile %>% 
+  select( part_num, color_id, quantity)
+
+batwing <- batwing %>% 
+  select( part_num, color_id, quantity)
+
+batmobile %>% 
+  left_join(batwing, by=c('part_num', 'color_id'), suffix=c('_batmobile', '_batwing'))
+
+
+batmobile %>% 
+  right_join(batwing, by=c('part_num', 'color_id'), suffix=c('_batmobile', '_batwing'))
+
+sets %>% 
+  count(theme_id, sort = TRUE) %>% 
+  inner_join(themes, by=c('theme_id'='id'))
+
+sets %>% 
+  count(theme_id, sort = TRUE) %>% 
+  right_join(themes, by=c('theme_id'='id')) %>% 
+  replace_na(list(n=0))
+
+parts %>%
+  count(part_cat_id) %>%
+  right_join(part_categories, by = c("part_cat_id" = "id")) %>%
+  # Filter for NA
+  filter(is.na(n))
+
+## joining table to it self. for showing a hierarchical relationship between parent column to its child column
+
+themes %>% 
+  inner_join(themes, by=c('parent_id'='id'), suffix=c('_child', '_parent')) %>% 
+  filter(name_child=='The Lord of the Rings')
+
+
+themes %>% 
+  inner_join(themes, by=c('parent_id'='id'), suffix=c('_child', '_parent')) %>% 
+  filter(name_parent=='The Lord of the Rings')
+
+
+themes %>% 
+  # Inner join the themes table
+  inner_join(themes, by=c('id'='parent_id'), suffix=c('_parent', '_child')) %>%
+  # Filter for the "Harry Potter" parent name 
+  filter(name_parent=='Harry Potter')
+
+# Join themes to itself again to find the grandchild relationships
+themes %>% 
+  inner_join(themes, by = c("id" = "parent_id"), suffix = c("_parent", "_child")) %>%
+  inner_join(themes, by=c('id_child'='parent_id'), suffix=c('_parent', '_grandchild'))
+
+themes %>% 
+  # Left join the themes table to its own children
+  left_join(themes, by = c("id" = "parent_id"), suffix = c("_parent", "_child")) %>%
+  # Filter for themes that have no child themes
+  filter(is.na(name_child))
+
+# if you want to keep all the observation of both tables you want you joint, then full join is go to go option.
+
+batmobile
+
+batwing
+
+batmobile %>% 
+  full_join(batwing, by=c('part_num', 'color_id'), suffix=c('_batmobile', '_batwing'))
+
+
+
+batmobile %>% 
+  full_join(batwing, by=c('part_num', 'color_id'), suffix=c('_batmobile', '_batwing')) %>% 
+  replace_na(list(quantity_batmobile=0,
+                  quantity_batwing=0))
+
+inventory_parts_joined <- inventories %>%
+  inner_join(inventories_parts, by = c("id" = "inventory_id")) %>%
+  arrange(desc(quantity)) %>%
+  select(-id, -version)
+
+# Start with inventory_parts_joined table
+inventory_parts_joined %>%
+  # Combine with the sets table 
+  inner_join(sets, by='set_num')%>%
+  # Combine with the themes table 
+  inner_join(themes, by=c('theme_id'='id'), suffix=c('_set', '_theme'))
+
+# Count the part number and color id, weight by quantity
+inventory_sets_themes <- inventory_parts_joined %>%
+  inner_join(sets, by = "set_num") %>%
+  inner_join(themes, by = c("theme_id" = "id"), suffix = c("_set", "_theme"))
+
+batman <- inventory_sets_themes %>%
+  filter(name_theme == "Batman")
+
+star_wars <- inventory_sets_themes %>%
+  filter(name_theme == "Star Wars")
+
+batman %>%
+  count(part_num, color_id, wt = quantity)
+
+star_wars %>%
+  count(part_num, color_id, wt = quantity)
+
+batmobile %>% 
+  semi_join(batwing, by=c('color_id', 'part_num'))
+
+batmobile %>% 
+  anti_join(batwing, by=c('color_id', 'part_num'))
+
+themes %>% 
+  semi_join(sets, by=c('id'='theme_id'))
+
+themes %>% 
+  anti_join(sets, by=c('id'='theme_id'))
+
+batmobile_colors <- batmobile %>% 
+  group_by(color_id) %>% 
+  summarise(total = sum(quantity))
+
+batmobile_colors
+
+batwing_colors <- batwing %>% 
+  group_by(color_id) %>% 
+  summarise(total =sum(quantity))
+
+
+colors_joined <-batwing_colors %>% 
+  full_join(batmobile_colors, by=c('color_id'), suffix=c('_batwing', '_batmobile')) %>% 
+  replace_na(list(total_batwing=0,
+                  total_batmobile=0)) %>% 
+  inner_join(colors, by=c('color_id'='id')) %>% 
+  mutate(total_batmobile= total_batmobile/sum(total_batmobile),
+         total_batwing=total_batwing/sum(total_batwing),
+         difference=total_batmobile-total_batwing) %>% 
+  select(-is_trans)
+
+color_platte <- setNames(colors_joined_one$rgb, colors_joined_one$name)
+
+colors_joined_one <-colors_joined %>% 
+  filter(rgb!= c('C91A09', 'F2CD37'))
+  
+
+
+colors_joined %>% 
+  mutate(name = fct_reorder(name, difference)) %>% 
+  ggplot(aes(name, difference, fill=name)) +
+  geom_col() +
+  coord_flip() +
+  theme_minimal() +
+  theme(legend.position = 'none')
+  #scale_fill_manual(values = color_platte)
+
+
+stackoverflow_df <- read_csv('questions.csv')
+
+
+stack_tidy <-stackoverflow_df %>%
+separate(tags, into = c('tag_parent', 'tag_child'), sep=',') %>% 
+  drop_na()
+  
+  
+
+stack_tidy %>% 
+filter(tag_parent=='r') %>% 
+  group_by(tag_child) %>% 
+  count(tag_child, sort = TRUE)
+  
