@@ -1513,4 +1513,128 @@ iris %>%
   geom_point(alpha = 0.5, position = position_jitter(width = 0.1)) +
   geom_point(data = iris_summary, shape=15, size=5)
 
-  
+str(sleep)
+
+sleep %>% 
+  ggplot(aes(ID)) + geom_bar()
+
+mtcars <- mtcars %>% 
+  mutate(cyl=as.factor(cyl), 
+         gear=as.factor(gear))
+
+mtcars %>% 
+  ggplot(aes(gear)) + geom_bar()
+
+
+iris_sum <- iris %>%
+  select(Sepal.Width, Species) %>% 
+  gather(key, value, -Species) %>% 
+  group_by(Species) %>% 
+  summarise(avrg = mean(value),
+                stdeviation=sd(value))
+
+iris_sum %>% 
+  ggplot(aes(Species, avrg)) + geom_bar(stat = 'identity') +
+  geom_errorbar(aes(ymin=avrg-stdeviation, max=avrg + stdeviation),
+                width=0.2)
+
+
+
+gapminder %>% 
+  group_by(year, continent) %>% 
+  summarise(LifeExp_avg = mean(lifeExp)) %>% 
+  ggplot(aes(year, LifeExp_avg, linetype=continent, color=continent)) + geom_line()
+
+
+gapminder %>% 
+  group_by(year, continent) %>% 
+  summarise(LifeExp_avg = mean(lifeExp)) %>% 
+  ggplot(aes(year, LifeExp_avg, linetype=continent)) + geom_line()
+
+gapminder %>% 
+  group_by(year, continent) %>% 
+  summarise(LifeExp_avg = mean(lifeExp)) %>%
+  ungroup() %>% 
+  ggplot(aes(year, LifeExp_avg, color=continent)) + geom_line() +
+  theme(legend.position = 'bottom')+
+  theme_wsj()
+
+
+iris %>% 
+  ggplot(aes(Sepal.Length, Petal.Width, color=Species)) +
+  geom_point() +
+  theme(text = element_text(colour = 'blue'))
+
+
+iris %>% 
+  ggplot(aes(Sepal.Length, Petal.Width, color=Species)) +
+  geom_point() +
+  theme(axis.text = element_text(colour = 'green'))
+
+iris %>% 
+  ggplot(aes(Sepal.Length, Sepal.Width, color=Species)) +
+  geom_jitter(alpha=0.6) +
+  theme(axis.title = element_text(colour = 'green'),
+        line = element_blank(),
+        rect = element_blank())
+
+iris %>% 
+  ggplot(aes(Sepal.Length, Sepal.Width, color=Species)) +
+  geom_jitter(alpha=0.6) +
+  theme(#axis.title = element_text(colour = 'green'),
+        line = element_blank(),
+        rect = element_blank(),
+        text = element_blank())
+
+gapminder_2002 <- gapminder %>% 
+  filter(year == 2002)
+
+
+gapminder_2002 %>% 
+  top_n(10,lifeExp)
+
+gapminder_2002 %>% 
+  arrange(lifeExp)
+
+gap_top_bottom <-gapminder_2002 %>% 
+  filter(lifeExp > 79.6 | lifeExp< 44.1)
+
+
+gap_top_bottom <- gap_top_bottom %>% 
+  select(country, lifeExp, continent)
+
+gap_top_bottom <- gap_top_bottom %>% 
+  arrange(desc(lifeExp))
+
+
+gap_top_bottom %>%
+  ggplot(aes(lifeExp, country, color=lifeExp)) +
+  geom_point()
+
+#Set the color scale
+palette <- brewer.pal(5, "RdYlBu")[-(2:4)]
+
+global_mean <- mean(gapminder_2002$lifeExp)
+x_start <- global_mean + 4
+y_start <- 5.5
+x_end <- global_mean
+y_end <- 7.5
+
+# Add a title and caption
+ggplot(gap_top_bottom, aes(x = lifeExp, y = country, color = lifeExp)) +
+  geom_point(size = 4) +
+  geom_segment(aes(xend = 30, yend = country), size = 2) +
+  geom_text(aes(label = round(lifeExp,1)), color = "white", size = 1.9) +
+  scale_x_continuous("", expand = c(0,0), limits = c(30,90), position = "top") +
+  #scale_color_gradientn(colors = palette) +
+  labs(title = "Highest and lowest life expectancies, 2007", caption = "Source: gapminder") +
+  #step_1_themes +
+  geom_vline(xintercept = global_mean, color = "grey40", linetype = 3) +
+  #step_3_annotation +
+  annotate(
+    "curve",
+    x = x_start, y = y_start,
+    xend = x_end, yend = y_end,
+    arrow = arrow(length = unit(0.2, "cm"), type = "closed"),
+    color = "grey40"
+  )
